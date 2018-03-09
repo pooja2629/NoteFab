@@ -7,4 +7,6 @@
     <string name="note_type_text">NoteTypeText</string>
     <string name="view_detail">ViewDetails</string>
     <string name="view_title">view title</string>
+    <string name="txt_time">Time</string>
+    <string name="textview_date">Date</string>
 </resources>

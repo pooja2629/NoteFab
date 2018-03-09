@@ -1,4 +1,4 @@
-package com.example.notefab
+package com.example.notefab.database
 
 import android.content.ContentValues
 import android.content.Context

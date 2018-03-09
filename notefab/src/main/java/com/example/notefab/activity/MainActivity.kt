@@ -1,10 +1,9 @@
-package com.example.notefab
+package com.example.notefab.activity
 
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
@@ -12,6 +11,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.notefab.Note
+import com.example.notefab.database.NoteDbManager
+import com.example.notefab.R
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -33,22 +35,21 @@ class MainActivity : AppCompatActivity() {
 
             }
         lvNotes.onItemClickListener = AdapterView.OnItemClickListener{
-            _, _, position, _ ->
-            Toast.makeText(this, "Click on " +
-                    listNotes[position].title, Toast.LENGTH_SHORT).show()
+            _, _, _, _ ->
+         //   Toast.makeText(this, "Click on " + listNotes[position].title, Toast.LENGTH_SHORT).show()
         }
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
-        val searchView: SearchView = menu!!.findItem(R.id.searchNote).actionView as SearchView
+        val searchView: SearchView = menu.findItem(R.id.searchNote).actionView as SearchView
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                Toast.makeText(applicationContext, query, Toast.LENGTH_LONG).show()
+               // Toast.makeText(applicationContext, query, Toast.LENGTH_LONG).show()
                 loadQuery("%$query%")
                 return false
             }
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                 val title = cursor.getString(cursor.getColumnIndex("Title"))
                 val content = cursor.getString(cursor.getColumnIndex("Content"))
                 listNotes.add(Note(id, title, content))
+
             } while (cursor.moveToNext())
         }
         val notesAdapter = NotesAdapter(this, listNotes)
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                 view = layoutInflater.inflate(R.layout.note, parent, false)
                 vh = ViewHolder(view)
                 view.tag = vh
-                Log.i("JSA", "set Tag for ViewHolder, position: " + position)
+                Log.i("JSA", "set Tag for ViewHolder, position: $position")
             } else {
                 view = convertView
                 vh = view.tag as ViewHolder

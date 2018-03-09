@@ -1,9 +1,12 @@
-package com.example.notefab
+package com.example.notefab.activity
 
 import android.content.ContentValues
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
+import com.example.notefab.database.NoteDbManager
+import com.example.notefab.R
 import kotlinx.android.synthetic.main.activity_note.*
 
 class NoteActivity : AppCompatActivity() {
@@ -12,6 +15,12 @@ class NoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note)
+        if (supportActionBar != null) {
+            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+
+            // getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         try {
             var bundle: Bundle = intent.extras
             id = bundle.getInt("MainActId", 0)
@@ -30,21 +39,33 @@ class NoteActivity : AppCompatActivity() {
             if (id == 0) {
                 val mID = dbManager.insert(values)
                 if (mID > 0) {
-                    Toast.makeText(this, "Add note successfully!", Toast.LENGTH_LONG).show()
+                   // Toast.makeText(this, "Add note successfully!", Toast.LENGTH_LONG).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "Fail to add note!", Toast.LENGTH_LONG).show()
+                  //  Toast.makeText(this, "Fail to add note!", Toast.LENGTH_LONG).show()
                 }
             } else {
                 var selectionArs = arrayOf(id.toString())
                 val mID = dbManager.update(values, "Id=?", selectionArs)
                 if (mID > 0) {
-                    Toast.makeText(this, "Add note successfully!", Toast.LENGTH_LONG).show()
+                   // Toast.makeText(this, "Add note successfully!", Toast.LENGTH_LONG).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "Fail to add note!", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this, "Fail to add note!", Toast.LENGTH_LONG).show()
                 }
             }
+        }
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
