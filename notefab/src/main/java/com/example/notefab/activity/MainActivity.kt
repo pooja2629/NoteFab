@@ -18,21 +18,18 @@ import com.example.notefab.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
+
 class MainActivity : AppCompatActivity() {
-
     private var listNotes = ArrayList<Note>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         loadQuery("%")
-
         fab.setOnClickListener {
             val intent = Intent(this@MainActivity,
                     NoteActivity::class.java)
             startActivity(intent)
-
             }
         lvNotes.onItemClickListener = AdapterView.OnItemClickListener{
             _, _, _, _ ->
@@ -44,10 +41,8 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
         val searchView: SearchView = menu.findItem(R.id.searchNote).actionView as SearchView
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
             override fun onQueryTextSubmit(query: String): Boolean {
                // Toast.makeText(applicationContext, query, Toast.LENGTH_LONG).show()
                 loadQuery("%$query%")
@@ -77,7 +72,6 @@ class MainActivity : AppCompatActivity() {
                 val title = cursor.getString(cursor.getColumnIndex("Title"))
                 val content = cursor.getString(cursor.getColumnIndex("Content"))
                 listNotes.add(Note(id, title, content))
-
             } while (cursor.moveToNext())
         }
         val notesAdapter = NotesAdapter(this, listNotes)
@@ -134,7 +128,6 @@ class MainActivity : AppCompatActivity() {
         val ivEdit: ImageView = view?.findViewById(R.id.ivEdit) as ImageView
         val ivDelete: ImageView = view?.findViewById(R.id.ivDelete) as ImageView
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -145,24 +138,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun loadQuery(title: String) {
-
         var dbManager = NoteDbManager(this)
         val projections = arrayOf("Id", "Title", "Content")
         val selectionArgs = arrayOf(title)
         val cursor = dbManager.query(projections, "Title like ?", selectionArgs, "Title")
         listNotes.clear()
         if (cursor.moveToFirst()) {
-
             do {
                 val id = cursor.getInt(cursor.getColumnIndex("Id"))
                 val title = cursor.getString(cursor.getColumnIndex("Title"))
                 val content = cursor.getString(cursor.getColumnIndex("Content"))
-
                 listNotes.add(Note(id, title, content))
-
             } while (cursor.moveToNext())
         }
-
         var notesAdapter = NotesAdapter(this, listNotes)
         lvNotes.adapter = notesAdapter
     }
